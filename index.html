@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>AI Engineer Roadmap</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #0d0f12; }
+  body {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    color: #e4e6e9;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 40px 16px 60px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.2em; color: #565d66; margin-bottom: 8px; }
+  h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; color: #f2f3f5; margin: 0 0 10px; }
+  .sub { font-size: 14px; color: #8a919b; line-height: 1.6; margin: 0 0 8px; }
+  .sub .accent { color: #baff29; }
+  .hint { font-size: 12px; color: #565d66; margin: 0 0 30px; }
+ 
+  /* progress bar */
+  .progress-track { height: 4px; background: #1c2025; border-radius: 4px; overflow: hidden; margin-bottom: 34px; }
+  .progress-fill { height: 100%; background: #baff29; box-shadow: 0 0 12px rgba(186,255,41,0.5); transition: width 0.4s ease; }
+ 
+  .row { display: flex; gap: 14px; position: relative; }
+  .rail { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #14171b; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: box-shadow 0.3s ease;
+  }
+  .dot.current { box-shadow: 0 0 0 2px #baff29, 0 0 24px rgba(186,255,41,0.15); }
+  .dot.locked { box-shadow: 0 0 0 1px #2a2f36; }
+  .dot.done { box-shadow: 0 0 0 1px #3a4048; opacity: 0.7; }
+  .dot svg { width: 15px; height: 15px; }
+ 
+  .line { width: 1px; flex: 1; background: #2a2f36; margin: 4px 0; min-height: 14px; transition: background 0.3s ease; }
+  .line.done { background: #baff29; opacity: 0.4; }
+ 
+  .card {
+    width: 100%; text-align: left; margin-bottom: 12px; border-radius: 10px;
+    background: #14171b; overflow: hidden;
+    transition: background 0.15s ease, box-shadow 0.3s ease; padding: 0; font-family: inherit; color: inherit;
+    cursor: pointer; display: block;
+  }
+  .card.current { box-shadow: 0 0 0 2px #baff29, 0 0 24px rgba(186,255,41,0.08); }
+  .card.locked { box-shadow: 0 0 0 1px #2a2f36; }
+  .card.done { box-shadow: 0 0 0 1px #3a4048; opacity: 0.75; }
+  .card-head-btn:active { background: #181c21; }
+ 
+  .card-head-btn { width: 100%; background: none; border: none; padding: 0; margin: 0; font-family: inherit; color: inherit; cursor: pointer; display: block; text-align: left; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; }
+  .card-tag { font-size: 10px; letter-spacing: 0.15em; margin-bottom: 3px; }
+  .tag-current { color: #baff29; }
+  .tag-locked { color: #7a828c; }
+  .tag-done { color: #6b7280; }
+  .status-pill { margin-left: 8px; }
+  .status-pill.progress { color: #baff29; }
+  .status-pill.doneflag { color: #6b7280; }
+  .card-title { font-size: 15px; font-weight: 500; color: #f2f3f5; }
+  .chev { width: 16px; height: 16px; color: #565d66; flex-shrink: 0; transition: transform 0.2s ease; }
+  .chev.open { transform: rotate(180deg); }
+ 
+  .panel { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.25s ease, opacity 0.2s ease; }
+  .panel.open { max-height: 600px; opacity: 1; }
+  .panel-inner { padding: 12px 16px 16px; border-top: 1px solid #22262c; }
+  .blurb { font-size: 12px; color: #8a919b; font-style: italic; margin: 12px 0 12px; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  li { display: flex; gap: 8px; font-size: 13px; color: #c4c8cd; line-height: 1.4; }
+  .num { color: #3a4048; flex-shrink: 0; }
+ 
+  .complete-btn {
+    margin-top: 14px; width: 100%; padding: 11px; border-radius: 7px; border: none;
+    background: #baff29; color: #0d0f12; font-family: inherit; font-weight: 700;
+    font-size: 12px; letter-spacing: 0.08em; cursor: pointer; transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+  .complete-btn:active { transform: scale(0.98); opacity: 0.85; }
+ 
+  .footer { margin-top: 30px; padding-top: 22px; border-top: 1px solid #22262c; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: #565d66; }
+  .footer svg { width: 16px; height: 16px; flex-shrink: 0; color: #3a4048; }
+  .reset-btn { background: none; border: none; color: #565d66; font-family: inherit; font-size: 11px; letter-spacing: 0.05em; text-decoration: underline; cursor: pointer; padding: 4px; }
+ 
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #baff29; color: #0d0f12; font-weight: 700; font-size: 12px; letter-spacing: 0.05em;
+    padding: 10px 18px; border-radius: 999px; opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 24px rgba(186,255,41,0.3);
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">ROADMAP // AI_ENGINEER.SH</div>
+  <h1>AI Engineer Path</h1>
+  <p class="sub">Six phases, in dependency order. Tap the glowing phase to mark it done.</p>
+  <p class="hint" id="statusLine"></p>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div id="timeline"></div>
+  <div class="footer">
+    <div style="display:flex; gap:8px; align-items:flex-start;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+      <span>AI Engineer ≠ ML Researcher. This path uses existing models — it does not train them from scratch.</span>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:18px;">
+    <button class="reset-btn" id="resetBtn">reset progress</button>
+  </div>
+</div>
+ 
+<div class="toast" id="toast"></div>
+ 
+<script>
+const PHASES = [
+  { id:0, tag:"PHASE 0", title:"Foundations",
+    blurb:"Where it all starts.",
+    items:["Python — core syntax, functions, OOP basics","Git & GitHub","Command line basics","HTTP / REST / JSON — how requests actually work","Light math — vectors, dot product, basic probability (intuition, not proofs)"] },
+  { id:1, tag:"PHASE 1", title:"Working with pre-trained models",
+    blurb:"Stop building models. Start using them.",
+    items:["What pre-trained models are, and their limits","The model landscape — OpenAI, Anthropic, Gemini, Hugging Face, Mistral","Calling APIs — auth, tokens, pricing, rate limits","Prompt engineering fundamentals"] },
+  { id:2, tag:"PHASE 2", title:"Building with LLMs",
+    blurb:"Give the model memory and structure.",
+    items:["Structured outputs & function/tool calling","Embeddings & vector databases","RAG — retrieval-augmented generation","Basic fine-tuning concepts"] },
+  { id:3, tag:"PHASE 3", title:"Agents",
+    blurb:"The fastest-growing category in the field right now.",
+    items:["Agent orchestration & memory","Tool use, multi-step workflows","Frameworks — LangChain, LlamaIndex (check current state)","Sandboxed execution environments"] },
+  { id:4, tag:"PHASE 4", title:"Production & shipping",
+    blurb:"Where MLOps / LLMOps actually earns its keep.",
+    items:["Deployment — wrap your logic in a real API","Evaluating LLM outputs (harder than normal tests)","LLMOps — monitoring, cost & latency, prompt versioning","AI safety & ethics — bias, privacy, responsible use"] },
+  { id:5, tag:"PHASE 5", title:"Portfolio",
+    blurb:"Proof beats certificates.",
+    items:["2–3 end-to-end projects — not tutorials","A RAG app, an agent, something deployed and demoable","Public GitHub, clear READMEs"] },
+];
+ 
+const ICONS = {
+  current: '<svg viewBox="0 0 24 24" fill="none" stroke="#baff29" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="#baff29"/></svg>',
+  locked: '<svg viewBox="0 0 24 24" fill="none" stroke="#565d66" stroke-width="1.5"><circle cx="12" cy="12" r="9"/></svg>',
+  done: '<svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>',
+};
+ 
+const STORAGE_KEY = 'ai-roadmap-progress';
+ 
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed.currentIndex === 'number') return parsed;
+    }
+  } catch (e) {}
+  return { currentIndex: 0 };
+}
+ 
+function saveProgress(state) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+ 
+let state = loadProgress();
+let openId = state.currentIndex;
+ 
+function statusOf(id) {
+  if (id < state.currentIndex) return 'done';
+  if (id === state.currentIndex) return 'current';
+  return 'locked';
+}
+ 
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+ 
+function render() {
+  const el = document.getElementById('timeline');
+  const doneCount = Math.min(state.currentIndex, PHASES.length);
+  const pct = Math.round((doneCount / PHASES.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+ 
+  const allDone = state.currentIndex >= PHASES.length;
+  document.getElementById('statusLine').innerHTML = allDone
+    ? '<span class="accent" style="color:#baff29;">All phases complete. Go build something.</span>'
+    : `You are in <span style="color:#baff29;">${PHASES[state.currentIndex].tag}</span> — ${doneCount}/${PHASES.length} phases done.`;
+ 
+  el.innerHTML = PHASES.map((phase, i) => {
+    const status = statusOf(phase.id);
+    const isOpen = openId === phase.id;
+    const isLast = i === PHASES.length - 1;
+    const tagClass = status === 'current' ? 'tag-current' : status === 'done' ? 'tag-done' : 'tag-locked';
+    const lineDone = phase.id < state.currentIndex - 0 ? (phase.id < state.currentIndex ? 'done' : '') : '';
+    return `
+    <div class="row">
+      <div class="rail">
+        <div class="dot ${status}">${ICONS[status]}</div>
+        ${!isLast ? `<div class="line ${phase.id < state.currentIndex ? 'done' : ''}"></div>` : ''}
+      </div>
+      <div style="width:100%;">
+        <div class="card ${status}" data-id="${phase.id}">
+          <button class="card-head-btn" data-toggle="${phase.id}" ${status === 'locked' ? 'disabled' : ''}>
+            <div class="card-head">
+              <div style="min-width:0;">
+                <div class="card-tag ${tagClass}">${phase.tag}${status === 'current' ? '<span class="status-pill progress">● IN PROGRESS</span>' : ''}${status === 'done' ? '<span class="status-pill doneflag">✓ DONE</span>' : ''}</div>
+                <div class="card-title">${phase.title}</div>
+              </div>
+              <svg class="chev ${isOpen ? 'open' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="panel ${isOpen ? 'open' : ''}">
+            <div class="panel-inner">
+              <p class="blurb">${phase.blurb}</p>
+              <ul>
+                ${phase.items.map((item, idx) => `<li><span class="num">${String(idx+1).padStart(2,'0')}</span>${item}</li>`).join('')}
+              </ul>
+              ${status === 'current' ? `<button class="complete-btn" data-complete="${phase.id}">MARK PHASE COMPLETE →</button>` : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+ 
+  el.querySelectorAll('[data-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      const id = parseInt(btn.dataset.toggle);
+      openId = openId === id ? null : id;
+      render();
+    });
+  });
+ 
+  el.querySelectorAll('[data-complete]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = parseInt(btn.dataset.complete);
+      if (id === state.currentIndex) {
+        state.currentIndex += 1;
+        saveProgress(state);
+        openId = state.currentIndex < PHASES.length ? state.currentIndex : null;
+        const finishedPhase = PHASES[id];
+        showToast(state.currentIndex < PHASES.length
+          ? `${finishedPhase.title} done — ${PHASES[state.currentIndex].title} unlocked`
+          : `${finishedPhase.title} done — roadmap complete`);
+        render();
+      }
+    });
+  });
+}
+ 
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state = { currentIndex: 0 };
+  saveProgress(state);
+  openId = 0;
+  render();
+});
+ 
+render();
+</script>
+</body>
+</html>
