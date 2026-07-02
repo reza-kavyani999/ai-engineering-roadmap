@@ -46,3 +46,7 @@ To host it yourself:
 ## License
 
 MIT — do whatever you want with it.
+
+## the live URL
+
+https://reza-kavyani999.github.io/ai-engineering-roadmap/
