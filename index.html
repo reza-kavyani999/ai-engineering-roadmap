@@ -6,95 +6,218 @@
 <title>AI Engineer Roadmap</title>
 <style>
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: #0d0f12; }
+ 
+  :root {
+    --bg: #f7f4fb;
+    --card: #ffffff;
+    --card-active: #faf8fd;
+    --text: #241d33;
+    --text-sub: #6b6280;
+    --text-mute: #a79cc0;
+    --text-list: #4a4258;
+    --border-locked: #ece7f5;
+    --border-panel: #f1ecf7;
+    --num: #c3b9d4;
+    --chev: #c3b9d4;
+    --tag-locked: #b3a8c7;
+    --tag-done: #9a90ad;
+    --blurb: #8f85a3;
+    --accent: #c17a5f;
+    --accent-rgb: 193,122,95;
+    --accent-grad-end: #d1a184;
+    --shadow-rgb: 43,36,56;
+    --toast-bg: #241d33;
+    --toast-text: #ffffff;
+    --overlay-bg: rgba(247,244,251,0.97);
+    --dot-bg: #ffffff;
+  }
+ 
+  [data-theme="dark"] {
+    --bg: #1a1620;
+    --card: #24202e;
+    --card-active: #2c2738;
+    --text: #f3eef8;
+    --text-sub: #b3a8c7;
+    --text-mute: #7d7391;
+    --text-list: #d8d2e3;
+    --border-locked: #372f45;
+    --border-panel: #332b3f;
+    --num: #5c5270;
+    --chev: #5c5270;
+    --tag-locked: #7d7391;
+    --tag-done: #948aab;
+    --blurb: #a297b8;
+    --accent: #d68d6f;
+    --accent-rgb: 214,141,111;
+    --accent-grad-end: #e2a888;
+    --shadow-rgb: 0,0,0;
+    --toast-bg: #f3eef8;
+    --toast-text: #1a1620;
+    --overlay-bg: rgba(26,22,32,0.97);
+    --dot-bg: #24202e;
+  }
+ 
+  html, body { margin: 0; padding: 0; background: var(--bg); transition: background 0.25s ease; }
   body {
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    color: #e4e6e9;
+    color: var(--text);
     -webkit-tap-highlight-color: transparent;
   }
   .wrap { max-width: 640px; margin: 0 auto; padding: 40px 16px 60px; }
-  .eyebrow { font-size: 11px; letter-spacing: 0.2em; color: #565d66; margin-bottom: 8px; }
-  h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; color: #f2f3f5; margin: 0 0 10px; }
-  .sub { font-size: 14px; color: #8a919b; line-height: 1.6; margin: 0 0 8px; }
-  .sub .accent { color: #baff29; }
-  .hint { font-size: 12px; color: #565d66; margin: 0 0 30px; }
  
-  /* progress bar */
-  .progress-track { height: 4px; background: #1c2025; border-radius: 4px; overflow: hidden; margin-bottom: 34px; }
-  .progress-fill { height: 100%; background: #baff29; box-shadow: 0 0 12px rgba(186,255,41,0.5); transition: width 0.4s ease; }
+  .top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.2em; color: var(--text-mute); margin-bottom: 8px; font-weight: 600; }
+ 
+  .theme-toggle {
+    background: var(--card); border: 1px solid var(--border-locked); border-radius: 999px;
+    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: background 0.2s ease, transform 0.15s ease;
+    box-shadow: 0 1px 3px rgba(var(--shadow-rgb),0.08);
+  }
+  .theme-toggle:active { transform: scale(0.92); }
+  .theme-toggle svg { width: 17px; height: 17px; color: var(--text-sub); }
+ 
+  h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); margin: 0 0 10px; }
+  .sub { font-size: 14px; color: var(--text-sub); line-height: 1.6; margin: 0 0 8px; }
+  .sub .accent { color: var(--accent); }
+  .hint { font-size: 12px; color: var(--text-mute); margin: 0 0 30px; }
+ 
+  .progress-track { height: 6px; background: var(--border-locked); border-radius: 6px; overflow: hidden; margin-bottom: 34px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-grad-end)); transition: width 0.4s ease; }
  
   .row { display: flex; gap: 14px; position: relative; }
   .rail { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
   .dot {
     width: 32px; height: 32px; border-radius: 50%;
-    background: #14171b; display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: box-shadow 0.3s ease;
+    background: var(--dot-bg); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: box-shadow 0.3s ease, background 0.25s ease;
   }
-  .dot.current { box-shadow: 0 0 0 2px #baff29, 0 0 24px rgba(186,255,41,0.15); }
-  .dot.locked { box-shadow: 0 0 0 1px #2a2f36; }
-  .dot.done { box-shadow: 0 0 0 1px #3a4048; opacity: 0.7; }
+  .dot.current { box-shadow: 0 0 0 2px var(--accent), 0 4px 16px rgba(var(--accent-rgb),0.25); }
+  .dot.locked { box-shadow: 0 0 0 1px var(--border-locked); }
+  .dot.done { box-shadow: 0 0 0 1px var(--border-locked); opacity: 0.85; }
   .dot svg { width: 15px; height: 15px; }
  
-  .line { width: 1px; flex: 1; background: #2a2f36; margin: 4px 0; min-height: 14px; transition: background 0.3s ease; }
-  .line.done { background: #baff29; opacity: 0.4; }
+  .line { width: 1px; flex: 1; background: var(--border-locked); margin: 4px 0; min-height: 14px; transition: background 0.3s ease; }
+  .line.done { background: var(--accent); opacity: 0.35; }
  
   .card {
-    width: 100%; text-align: left; margin-bottom: 12px; border-radius: 10px;
-    background: #14171b; overflow: hidden;
-    transition: background 0.15s ease, box-shadow 0.3s ease; padding: 0; font-family: inherit; color: inherit;
-    cursor: pointer; display: block;
+    width: 100%; text-align: left; margin-bottom: 12px; border-radius: 12px;
+    background: var(--card); overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.15s ease, background 0.25s ease; padding: 0; font-family: inherit; color: inherit;
+    display: block; box-shadow: 0 1px 3px rgba(var(--shadow-rgb),0.1);
   }
-  .card.current { box-shadow: 0 0 0 2px #baff29, 0 0 24px rgba(186,255,41,0.08); }
-  .card.locked { box-shadow: 0 0 0 1px #2a2f36; }
-  .card.done { box-shadow: 0 0 0 1px #3a4048; opacity: 0.75; }
-  .card-head-btn:active { background: #181c21; }
+  .card.current { box-shadow: 0 0 0 2px var(--accent), 0 8px 24px rgba(var(--accent-rgb),0.15); }
+  .card.locked { box-shadow: 0 1px 2px rgba(var(--shadow-rgb),0.06); }
+  .card.done { box-shadow: 0 1px 3px rgba(var(--shadow-rgb),0.08); }
  
   .card-head-btn { width: 100%; background: none; border: none; padding: 0; margin: 0; font-family: inherit; color: inherit; cursor: pointer; display: block; text-align: left; }
+  .card-head-btn:active { background: var(--card-active); }
   .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; }
-  .card-tag { font-size: 10px; letter-spacing: 0.15em; margin-bottom: 3px; }
-  .tag-current { color: #baff29; }
-  .tag-locked { color: #7a828c; }
-  .tag-done { color: #6b7280; }
+  .card-tag { font-size: 10px; letter-spacing: 0.15em; margin-bottom: 3px; font-weight: 700; }
+  .tag-current { color: var(--accent); }
+  .tag-locked { color: var(--tag-locked); }
+  .tag-done { color: var(--tag-done); }
   .status-pill { margin-left: 8px; }
-  .status-pill.progress { color: #baff29; }
-  .status-pill.doneflag { color: #6b7280; }
-  .card-title { font-size: 15px; font-weight: 500; color: #f2f3f5; }
-  .chev { width: 16px; height: 16px; color: #565d66; flex-shrink: 0; transition: transform 0.2s ease; }
+  .status-pill.progress { color: var(--accent); }
+  .status-pill.doneflag { color: var(--tag-done); }
+  .card-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .chev { width: 16px; height: 16px; color: var(--chev); flex-shrink: 0; transition: transform 0.2s ease; }
   .chev.open { transform: rotate(180deg); }
  
   .panel { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.25s ease, opacity 0.2s ease; }
   .panel.open { max-height: 600px; opacity: 1; }
-  .panel-inner { padding: 12px 16px 16px; border-top: 1px solid #22262c; }
-  .blurb { font-size: 12px; color: #8a919b; font-style: italic; margin: 12px 0 12px; }
+  .panel-inner { padding: 12px 16px 16px; border-top: 1px solid var(--border-panel); }
+  .blurb { font-size: 12px; color: var(--blurb); font-style: italic; margin: 12px 0 12px; }
   ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-  li { display: flex; gap: 8px; font-size: 13px; color: #c4c8cd; line-height: 1.4; }
-  .num { color: #3a4048; flex-shrink: 0; }
+  li { display: flex; gap: 8px; font-size: 13px; color: var(--text-list); line-height: 1.4; }
+  .num { color: var(--num); flex-shrink: 0; font-weight: 700; }
  
   .complete-btn {
-    margin-top: 14px; width: 100%; padding: 11px; border-radius: 7px; border: none;
-    background: #baff29; color: #0d0f12; font-family: inherit; font-weight: 700;
+    margin-top: 14px; width: 100%; padding: 11px; border-radius: 8px; border: none;
+    background: var(--accent); color: #ffffff; font-family: inherit; font-weight: 700;
     font-size: 12px; letter-spacing: 0.08em; cursor: pointer; transition: transform 0.1s ease, opacity 0.15s ease;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb),0.35);
   }
-  .complete-btn:active { transform: scale(0.98); opacity: 0.85; }
+  .complete-btn:active { transform: scale(0.98); opacity: 0.9; }
  
-  .footer { margin-top: 30px; padding-top: 22px; border-top: 1px solid #22262c; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: #565d66; }
-  .footer svg { width: 16px; height: 16px; flex-shrink: 0; color: #3a4048; }
-  .reset-btn { background: none; border: none; color: #565d66; font-family: inherit; font-size: 11px; letter-spacing: 0.05em; text-decoration: underline; cursor: pointer; padding: 4px; }
+  .footer { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--border-locked); display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--text-mute); }
+  .footer svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--chev); }
+  .reset-btn { background: none; border: none; color: var(--text-mute); font-family: inherit; font-size: 11px; letter-spacing: 0.05em; text-decoration: underline; cursor: pointer; padding: 4px; }
  
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: #baff29; color: #0d0f12; font-weight: 700; font-size: 12px; letter-spacing: 0.05em;
+    background: var(--toast-bg); color: var(--toast-text); font-weight: 700; font-size: 12px; letter-spacing: 0.05em;
     padding: 10px 18px; border-radius: 999px; opacity: 0; pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 24px rgba(186,255,41,0.3);
+    transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 24px rgba(var(--shadow-rgb),0.3);
     white-space: nowrap;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+ 
+  /* ---- Congratulations overlay ---- */
+  .celebrate-overlay {
+    position: fixed; inset: 0; background: var(--overlay-bg);
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 100; overflow: hidden;
+  }
+  .celebrate-overlay.show { opacity: 1; pointer-events: auto; }
+ 
+  .confetti-piece {
+    position: absolute; top: -10%; width: 8px; height: 14px; opacity: 0.9;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(600deg); opacity: 0.9; }
+  }
+ 
+  .celebrate-card {
+    position: relative; z-index: 2; text-align: center; padding: 40px 32px;
+    background: var(--card); border-radius: 20px; box-shadow: 0 20px 60px rgba(var(--shadow-rgb),0.22);
+    max-width: 380px; margin: 0 20px;
+    transform: scale(0.85); opacity: 0;
+    animation: celebrate-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes celebrate-pop {
+    0% { transform: scale(0.75); opacity: 0; }
+    60% { transform: scale(1.04); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+ 
+  .celebrate-emoji {
+    font-size: 44px; display: inline-block;
+    animation: celebrate-bounce 1.1s ease-in-out infinite;
+  }
+  @keyframes celebrate-bounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(-6deg); }
+  }
+ 
+  .celebrate-title {
+    font-size: 24px; font-weight: 800; color: var(--text); margin: 14px 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .celebrate-sub {
+    font-size: 13px; color: var(--blurb); line-height: 1.6; margin: 0 0 22px;
+  }
+  .celebrate-close {
+    background: var(--accent); color: #fff; border: none; padding: 11px 24px; border-radius: 999px;
+    font-family: inherit; font-weight: 700; font-size: 12px; letter-spacing: 0.06em; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(var(--accent-rgb),0.4); transition: transform 0.1s ease;
+  }
+  .celebrate-close:active { transform: scale(0.96); }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">ROADMAP // AI_ENGINEER.SH</div>
-  <h1>AI Engineer Path</h1>
+  <div class="top-row">
+    <div>
+      <div class="eyebrow">ROADMAP // AI_ENGINEER.SH</div>
+      <h1>AI Engineer Path</h1>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
+  </div>
   <p class="sub">Six phases, in dependency order. Tap the glowing phase to mark it done.</p>
   <p class="hint" id="statusLine"></p>
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
@@ -111,6 +234,16 @@
 </div>
  
 <div class="toast" id="toast"></div>
+ 
+<div class="celebrate-overlay" id="celebrateOverlay">
+  <div id="confettiLayer"></div>
+  <div class="celebrate-card" id="celebrateCard">
+    <span class="celebrate-emoji">🎉</span>
+    <div class="celebrate-title">Congratulations!</div>
+    <p class="celebrate-sub">All six phases complete. You went from zero to a shipped AI engineering path — that's not nothing. Time to build something real with it.</p>
+    <button class="celebrate-close" id="celebrateClose">KEEP GOING →</button>
+  </div>
+</div>
  
 <script>
 const PHASES = [
@@ -134,13 +267,31 @@ const PHASES = [
     items:["2–3 end-to-end projects — not tutorials","A RAG app, an agent, something deployed and demoable","Public GitHub, clear READMEs"] },
 ];
  
-const ICONS = {
-  current: '<svg viewBox="0 0 24 24" fill="none" stroke="#baff29" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="#baff29"/></svg>',
-  locked: '<svg viewBox="0 0 24 24" fill="none" stroke="#565d66" stroke-width="1.5"><circle cx="12" cy="12" r="9"/></svg>',
-  done: '<svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>',
-};
+function currentAccent() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#c17a5f';
+}
+function currentMute() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--tag-locked').trim() || '#b3a8c7';
+}
+function currentDone() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--tag-done').trim() || '#9a90ad';
+}
+ 
+function icons() {
+  const accent = currentAccent();
+  const mute = currentMute();
+  const done = currentDone();
+  return {
+    current: `<svg viewBox="0 0 24 24" fill="none" stroke="${accent}" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="${accent}"/></svg>`,
+    locked: `<svg viewBox="0 0 24 24" fill="none" stroke="${mute}" stroke-width="1.5"><circle cx="12" cy="12" r="9"/></svg>`,
+    done: `<svg viewBox="0 0 24 24" fill="none" stroke="${done}" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>`,
+  };
+}
  
 const STORAGE_KEY = 'ai-roadmap-progress';
+const THEME_KEY = 'ai-roadmap-theme';
+const CONFETTI_COLORS_LIGHT = ['#c17a5f', '#d1a184', '#8a76a8', '#c9a94f', '#6fa89e'];
+const CONFETTI_COLORS_DARK = ['#d68d6f', '#e2a888', '#a893c9', '#d6bb6c', '#7fc2b8'];
  
 function loadProgress() {
   try {
@@ -150,15 +301,44 @@ function loadProgress() {
       if (typeof parsed.currentIndex === 'number') return parsed;
     }
   } catch (e) {}
-  return { currentIndex: 0 };
+  return { currentIndex: 0, celebrated: false };
 }
- 
 function saveProgress(state) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
 }
  
+const SUN_PATH = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+const MOON_PATH = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
+ 
+function loadTheme() {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'dark' || saved === 'light') return saved;
+  } catch (e) {}
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('themeIcon').innerHTML = SUN_PATH;
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('themeIcon').innerHTML = MOON_PATH;
+  }
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+}
+ 
+let theme = loadTheme();
+applyTheme(theme);
+ 
+document.getElementById('themeToggle').addEventListener('click', () => {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  applyTheme(theme);
+  render();
+});
+ 
 let state = loadProgress();
-let openId = state.currentIndex;
+let openId = Math.min(state.currentIndex, PHASES.length - 1);
  
 function statusOf(id) {
   if (id < state.currentIndex) return 'done';
@@ -173,23 +353,54 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 1800);
 }
  
+function launchConfetti() {
+  const layer = document.getElementById('confettiLayer');
+  layer.innerHTML = '';
+  const palette = theme === 'dark' ? CONFETTI_COLORS_DARK : CONFETTI_COLORS_LIGHT;
+  const count = 70;
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    const color = palette[Math.floor(Math.random() * palette.length)];
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = color;
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    const duration = 2.2 + Math.random() * 1.8;
+    const delay = Math.random() * 0.6;
+    piece.style.animationDuration = duration + 's';
+    piece.style.animationDelay = delay + 's';
+    piece.style.width = (6 + Math.random() * 6) + 'px';
+    piece.style.height = (10 + Math.random() * 8) + 'px';
+    layer.appendChild(piece);
+  }
+}
+ 
+function showCelebration() {
+  launchConfetti();
+  document.getElementById('celebrateOverlay').classList.add('show');
+}
+function hideCelebration() {
+  document.getElementById('celebrateOverlay').classList.remove('show');
+}
+ 
 function render() {
+  const ICONS = icons();
   const el = document.getElementById('timeline');
   const doneCount = Math.min(state.currentIndex, PHASES.length);
   const pct = Math.round((doneCount / PHASES.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
  
   const allDone = state.currentIndex >= PHASES.length;
+  const accent = currentAccent();
   document.getElementById('statusLine').innerHTML = allDone
-    ? '<span class="accent" style="color:#baff29;">All phases complete. Go build something.</span>'
-    : `You are in <span style="color:#baff29;">${PHASES[state.currentIndex].tag}</span> — ${doneCount}/${PHASES.length} phases done.`;
+    ? `<span class="accent">All phases complete. Go build something.</span>`
+    : `You are in <span style="color:${accent};">${PHASES[state.currentIndex].tag}</span> — ${doneCount}/${PHASES.length} phases done.`;
  
   el.innerHTML = PHASES.map((phase, i) => {
     const status = statusOf(phase.id);
     const isOpen = openId === phase.id;
     const isLast = i === PHASES.length - 1;
     const tagClass = status === 'current' ? 'tag-current' : status === 'done' ? 'tag-done' : 'tag-locked';
-    const lineDone = phase.id < state.currentIndex - 0 ? (phase.id < state.currentIndex ? 'done' : '') : '';
     return `
     <div class="row">
       <div class="rail">
@@ -236,24 +447,37 @@ function render() {
       const id = parseInt(btn.dataset.complete);
       if (id === state.currentIndex) {
         state.currentIndex += 1;
+        const finishedPhase = PHASES[id];
+        const justFinishedAll = state.currentIndex >= PHASES.length;
+ 
+        if (justFinishedAll && !state.celebrated) {
+          state.celebrated = true;
+        }
         saveProgress(state);
         openId = state.currentIndex < PHASES.length ? state.currentIndex : null;
-        const finishedPhase = PHASES[id];
+ 
         showToast(state.currentIndex < PHASES.length
           ? `${finishedPhase.title} done — ${PHASES[state.currentIndex].title} unlocked`
           : `${finishedPhase.title} done — roadmap complete`);
         render();
+ 
+        if (justFinishedAll) {
+          setTimeout(showCelebration, 400);
+        }
       }
     });
   });
 }
  
 document.getElementById('resetBtn').addEventListener('click', () => {
-  state = { currentIndex: 0 };
+  state = { currentIndex: 0, celebrated: false };
   saveProgress(state);
   openId = 0;
+  hideCelebration();
   render();
 });
+ 
+document.getElementById('celebrateClose').addEventListener('click', hideCelebration);
  
 render();
 </script>
