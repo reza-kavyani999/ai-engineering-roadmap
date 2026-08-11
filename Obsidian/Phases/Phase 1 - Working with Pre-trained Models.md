@@ -15,6 +15,7 @@ status: locked
 - [ ] The model landscape — OpenAI, Anthropic, Gemini, Hugging Face, Mistral
 - [ ] Calling APIs — auth, tokens, pricing, rate limits
 - [ ] Prompt engineering fundamentals
+- [ ] Open-source models — Hugging Face Hub, running models locally with Ollama
 
 ## Notes
 

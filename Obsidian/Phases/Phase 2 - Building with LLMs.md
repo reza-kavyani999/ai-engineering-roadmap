@@ -15,6 +15,7 @@ status: locked
 - [ ] Embeddings & vector databases
 - [ ] RAG — retrieval-augmented generation
 - [ ] Basic fine-tuning concepts
+- [ ] Multimodal AI — image/audio/video understanding & generation (Vision API, Whisper, DALL·E)
 
 ## Notes
 

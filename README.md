@@ -23,10 +23,10 @@ A single self-contained `index.html` file (no build step, no dependencies) that 
 | Phase | Focus |
 |---|---|
 | 0 | Foundations — Python, Git, HTTP/REST/JSON, light math |
-| 1 | Working with pre-trained models — APIs, prompt engineering |
-| 2 | Building with LLMs — structured outputs, embeddings, RAG |
+| 1 | Working with pre-trained models — APIs, prompt engineering, open-source models (Hugging Face, Ollama) |
+| 2 | Building with LLMs — structured outputs, embeddings, RAG, multimodal AI |
 | 3 | Agents — orchestration, tool use, frameworks |
-| 4 | Production & shipping — deployment, evaluation, LLMOps |
+| 4 | Production & shipping — deployment, evaluation, LLMOps, AI safety & ethics |
 | 5 | Portfolio — end-to-end projects, public GitHub presence |
 
 ## Usage

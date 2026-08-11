@@ -14,7 +14,7 @@ status: locked
 - [ ] Deployment — wrap your logic in a real API
 - [ ] Evaluating LLM outputs (harder than normal tests)
 - [ ] LLMOps — monitoring, cost & latency, prompt versioning
-- [ ] AI safety & ethics — bias, privacy, responsible use
+- [ ] AI safety & ethics — prompt injection, bias & fairness, adversarial testing, moderation APIs, privacy
 
 ## Notes
 
